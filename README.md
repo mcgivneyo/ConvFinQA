@@ -1,16 +1,23 @@
 # ConvFinQA
-__Numerical Reasoning with the ConvFinQA Dataset__
+### Numerical Reasoning with the ConvFinQA Dataset
 
-Aim: explore and evaluate different LLM methods and models on a numerical reasoning dataset
+__Aim: explore and evaluate different LLM methods and models on a numerical reasoning dataset__
 
-____
-
+#todo
+1.  build out with different models
+1. comparing numerical reasoning
+1. cot
+1. instructor
+1. iterate
+1. plot results
 
 CONVFINQA: Exploring the Chain of Numerical Reasoning in Conversational Finance Question Answering
-
 Exploration of answering questions based on financial documents in the ConvFinQA dataset using multi-hop reasoning
 
 **ConvFinQA EMNLP 2022 paper: Exploring the Chain of Numerical Reasoning in Conversational Finance Question Answering** <https://arxiv.org/abs/2210.03849>
+
+the dataset is available from : https://paperswithcode.com/dataset/convfinqa
+
 
 ![mindmap](./img/20240817_122012.jpg)
 
@@ -39,6 +46,10 @@ A hybrid question involves a more natural way of conversing where once a method 
 
 
 ![simple and hybrid questions](./img/conversation_types.png)
+
+The raw data consists of short json structures:
+
+
 ###
 
 

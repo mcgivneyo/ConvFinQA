@@ -1,5 +1,5 @@
 # utils.py
-# utility functions for the data processing and model evaluation.
+"""utility functions for the data processing and model evaluation."""
 
 import pandas as pd
 import numpy as np
@@ -8,6 +8,7 @@ from numerizer import numerize
 from collections import Counter
 from pathlib import Path
 import math
+
 
 def compare_value(val1, val2, pct_precision=1, num_precision=1, verbose=False)->int:
     """
@@ -32,8 +33,7 @@ def compare_value(val1, val2, pct_precision=1, num_precision=1, verbose=False)->
         val2 = float(f'{val2:.4f}')
         val2 = np.round(float(val2) * 100,1)
         score = 1 if abs(float(val1) - float(val2)) < pct_precision else 0
-        if verbose and not scores[-1]:
-            print(val1, val2)   
+
     else:
         val1 = float(val1.strip())
         val2 = np.round(float(val2), 0)
@@ -98,7 +98,7 @@ def get_score(value_type: str, amt: float, gt_amt: float,
     """
     tolerance = num_tolerance
     if value_type=='PERCENT':
-        if amt >1  and gt_amount < 1:
+        if amt >1  and gt_amt < 1:
             amt /= 100
             tolerance = pct_tolerance
 
@@ -122,8 +122,8 @@ def score_answers(response:list, exe_ans_list:list, step_list: list)->dict:  # t
     'exe_ans': final answer of the chain is correct
     """
     # some hacky thresholds for comparing numbers
-    num_precision = 1   
-    pct_precision = 0.1
+    # num_precision = 1   
+    # pct_precision = 0.1
 
     if len(response) != len(exe_ans_list):
         # todo: mismatch between the number of answers - create a better matching algorithm
@@ -217,7 +217,7 @@ def fix_numerics(val:str, pct:bool = False)->str:
         val = float(numerize(val))
         if pct:
             val = f'{val:.1%}'
-    except:
+     except ValueError as e:
         val = 'fail'
 
     return val
