@@ -16,10 +16,12 @@ Exploration of answering questions based on financial documents in the ConvFinQA
 
 
 ### ConvFinQA Dataset
-The aim of this dateset is to study the real-world scenario of conversational question answering over
-financial reports:  
-investors or analysts would typically ask sequential questions to get insights into the numerical in the reports. 
-The questions require extensive calculations and meanwhile often demonstrate cross dependency, forming the chains of numerical reasoning throughout the conversation.
+The aim of this dateset is to study the real-world scenario of conversational question answering overfinancial reports:  
+*  investors or analysts would typically ask sequential questions to get insights into the numerical in the reports. 
+*  The questions require extensive calculations and meanwhile often demonstrate cross dependency, forming the chains of numerical reasoning throughout the conversation.
+
+
+The dataset consists of short extracts, tables etc from a financial report with a list of analysts question and corresponding answers. The questions focus on extracting specific facts, amounts etc and then proceeding to create specific calculations, summary stats or comparisons.
 
 
 ![example_question](./img/definition.png)

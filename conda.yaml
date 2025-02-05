@@ -1,0 +1,18 @@
+name: env_convfinqa
+channels:
+  - conda-forge
+dependencies:
+  - openai
+  - ipykernel
+  - instructor
+  - pydantic
+  - python=3.11
+  - pandas
+  - pip
+  - numpy
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - pip:
+    - python-dotenv
+
