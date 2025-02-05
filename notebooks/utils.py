@@ -1,6 +1,5 @@
 # utils.py
-# This file contains utility functions for the data processing and model evaluation.
-
+# utility functions for the data processing and model evaluation.
 
 import pandas as pd
 import numpy as np
@@ -8,9 +7,7 @@ from pprint import pprint
 from numerizer import numerize
 from collections import Counter
 from pathlib import Path
-
-
-# EDA and data transformation
+import math
 
 def compare_value(val1, val2, pct_precision=1, num_precision=1, verbose=False)->int:
     """
@@ -45,13 +42,14 @@ def compare_value(val1, val2, pct_precision=1, num_precision=1, verbose=False)->
 
 
 def get_difficulty(annotation:dict)->str:
-    '''
-    get relative difficulty of the question based on the simple/hybrid conversation type
-    and the number of steps needed to solve the question
-    # todo add weights to the steps, convert to a score
-    '''
-    steps = dict(Counter(annotation.get('qa_split', [])))
-    return steps
+    """
+    Get the relative difficulty of the question based on the simple/hybrid conversation type
+    and the number of steps needed to solve the question.
+        annotation (dict): The annotation dictionary containing question details.
+        str: A string representing the difficulty level of the question.
+    
+        """
+    return dict(Counter(annotation.get('qa_split', [])))
 
 
 def get_q(row:pd.Series)->dict:
@@ -82,7 +80,7 @@ def get_a(row:pd.Series)->dict:
     return d
 
 
-import math
+
 def get_score(value_type: str, amt: float, gt_amt: float,
               num_tolerance: float = 1, pct_tolerance: float = 0.1) -> int:
     """
@@ -128,7 +126,7 @@ def score_answers(response:list, exe_ans_list:list, step_list: list)->dict:  # t
     pct_precision = 0.1
 
     if len(response) != len(exe_ans_list):
-    # todo: mismatch between the number of answers - create a better matching algorithm
+        # todo: mismatch between the number of answers - create a better matching algorithm
         print('mismatch between the number of answers')
         print(response)
         print(exe_ans_list) 
@@ -172,8 +170,6 @@ def evaluate_run_results(df_results:pd.DataFrame)->dict:
     return {k: v if isinstance(v, int) else round(v, 2) for k,v in results.items()}
 
 
-
-
 def compare_values(table, pct_precision=1, num_precision=1, verbose=False):
     """
     Compares values in each row of the table and returns 1 if they are the same, 0 otherwise.
@@ -204,59 +200,54 @@ def compare_values(table, pct_precision=1, num_precision=1, verbose=False):
     return scores
 
 
-def fix_numerics(val:str)->str:
+def fix_numerics(val:str, pct:bool = False)->str:
     """
     fix numeric values to have a fixed number of decimal places
     """
     val = val.replace('$ ', '').replace('yes , ', '').strip()
     val = val.replace('increased', '').replace('\\\\n', '').strip()
     val = val.replace('decreased', '').strip()
-    pct = False
+    
     if '%' in val:
         val = val.replace('%', '').strip()
         pct = True
 
     print(val)
     try:
-        
         val = float(numerize(val))
         if pct:
             val = f'{val:.1%}'
-        
     except:
         val = 'fail'
 
     return val
 
 
-
-def save_results(df_results:pd.DataFrame, folder:str='./working_results', filename:str=None):
+def save_results(df_results:pd.DataFrame, folder:str='./working_results', filename:str=None)->None:
     """
     Save the results to a file
     args:
     df_results: pd.DataFrame: results to save
     folder: str: folder to save the results
     filename: str: name of the file to save the results
-    return:
-    None
+    return: None
     """
     ts = pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')
     if not filename or not isinstance(filename, str):
         filename = f'results_{ts}.csv'
     df_results.to_csv(Path(folder) / filename, index=False)
+    return
 
 
-
-
-# for table to text embeddings
-def remove_space(text_in):
-    res = []
-
-    for tmp in text_in.split(" "):
-        if tmp != "":
-            res.append(tmp)
-
-    return " ".join(res)
+def remove_extra_spaces(text_in):
+    """
+    Remove extra spaces from a string.
+    Args:
+        text_in (str): The input string to process.
+    Returns:
+        str: The processed string with extra spaces removed.
+    """
+    return " ".join([s for s in text_in.split if s])
 
 
 def table_row_to_text(header, row):
@@ -269,7 +260,6 @@ def table_row_to_text(header, row):
         res += (header[0] + " ")
 
     for head, cell in zip(header[1:], row[1:]):
-        res += ("the " + row[0] + " of " + head + " is " + cell + " ; ")
+        res += ("the " + row[0] + " of " + head + " is " + cell.strip() + " ; ")
     
-    res = remove_space(res)
-    return res.strip()
+    return remove_extra_spaces(res).strip()
